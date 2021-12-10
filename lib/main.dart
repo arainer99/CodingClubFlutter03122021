@@ -1,3 +1,5 @@
+import 'package:codingclub_031221/genartewords.dart';
+import 'package:codingclub_031221/wordpair.service.dart';
 import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
 
@@ -18,10 +20,13 @@ class MyApp extends StatelessWidget {
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Unsere Supercoole App'),
+          title: const Text("Unsere Supercoole App"),
         ),
-        body: Center(
-          child: RandomWords(),
+        body: Column(
+          children: <Widget>[
+            WordGenerator(),
+            RandomWords(),
+          ],
         ),
       ),
     );
@@ -36,10 +41,15 @@ class RandomWords extends StatefulWidget {
 }
 
 class _RandomWordState extends State<RandomWords> {
+  WordsService wordsService = WordsService();
+
   final List<WordPair> _wortPaare = <WordPair>[];
 
   Widget _buildWordPairs() {
+    _wortPaare.addAll(wordsService.wordPairs);
     return ListView.builder(
+      shrinkWrap: true,
+      scrollDirection: Axis.vertical,
       padding: EdgeInsets.all(16.0),
       itemBuilder: (context, i) {
         if (i.isOdd) {
@@ -68,8 +78,8 @@ class _RandomWordState extends State<RandomWords> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _buildWordPairs(),
+    return Expanded(
+      child: _buildWordPairs(),
     );
   }
 }
